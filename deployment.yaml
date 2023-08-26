@@ -47,7 +47,7 @@ metadata:
   name: rotten-potatoes-deployment
   namespace: imersao
 spec:
-  replica: 3
+  replicas: 3
   selector:
     matchLabels:
       app: rotten-potatoes
@@ -59,7 +59,7 @@ spec:
       containers:
       - name: rotten-potatoes
         image: lucaslive974/rotten-potatoes:v1
-        environments:
+        env:
             - name: MONGODB_DB
               value: "rottenpotatoes"
             - name: MONGODB_HOST
@@ -88,5 +88,5 @@ spec:
   ports:
   - port: 80
     targetPort: 5000
-    Nodeport: 30000
-    type: NodePort
+    nodePort: 30000
+  type: NodePort
