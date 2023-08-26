@@ -41,9 +41,9 @@ spec:
         image: mongo
         env:
           - name: MONGO_INITDB_ROOT_USERNAME
-            value: "root"
+            value: potatoes
           - name: MONGO_INITDB_ROOT_PASSWORD
-            value: "root"
+            value: potatoes
           - name: MONGO_INITDB_DATABASE
             value: "rottenpotatoes"
         resources:
