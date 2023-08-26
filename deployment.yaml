@@ -17,17 +17,13 @@ spec:
         image: mongo
         env:
           - name: MONGO_INITDB_ROOT_USERNAME
-            value: root
+            value: potatoes
           - name: MONGO_INITDB_ROOT_PASSWORD
-            value: root
+            value: potatoes
           - name: MONGO_INITDB_DATABASE
             value: rottenpotatoes
-        resources:
-          limits:
-            memory: "256Mi"
-            cpu: "1000m"
         ports:
-        - containerPort: 27017
+          - containerPort: 27017
 ---
 apiVersion: v1
 kind: Service
@@ -61,19 +57,15 @@ spec:
         image: lucaslive974/rotten-potatoes:v1
         env:
             - name: MONGODB_DB
-              value: "rottenpotatoes"
+              value: admin
             - name: MONGODB_HOST
-              value: "mongo-service"
+              value: mongo-service
             - name: MONGODB_PORT
               value: "27017"
             - name: MONGODB_USERNAME
-              value: "root"
+              value: potatoes
             - name: MONGODB_PASSWORD
-              value: "root"
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+              value: potatoes
         ports:
         - containerPort: 5000
 ---
