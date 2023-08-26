@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            value: root
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            value: root
+          - name: MONGO_INITDB_DATABASE
+            value: rottenpotatoes
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "1000m"
+        ports:
+        - containerPort: 27017
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo
+  ports:
+  - port: 27017
+    targetPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rotten-potatoes-deployment
+  namespace: imersao
+spec:
+  replica: 3
+  selector:
+    matchLabels:
+      app: rotten-potatoes
+  template:
+    metadata:
+      labels:
+        app: rotten-potatoes
+    spec:
+      containers:
+      - name: rotten-potatoes
+        image: lucaslive974/rotten-potatoes:1.0
+        environments:
+            - name: MONGODB_DB
+              value: "rottenpotatoes"
+            - name: MONGODB_HOST
+              value: "mongo-service"
+            - name: MONGODB_PORT
+              value: "27017"
+            - name: MONGODB_USERNAME
+              value: "root"
+            - name: MONGODB_PASSWORD
+              value: "root"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rotten-potatoes-service
+spec:
+  selector:
+    app: rotten-potatoes
+  ports:
+  - port: 80
+    targetPort: 5000
+    Nodeport: 30000
+    type: NodePort
